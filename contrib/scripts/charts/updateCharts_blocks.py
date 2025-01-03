@@ -14,13 +14,13 @@ import requests
 isTestnet = True
 
 # RPC CREDS
-rpc_user = "rpc"
-rpc_pass = "pivxrpc"
+rpc_user = "r_pc" #"rpc"
+rpc_pass = "skyrr_pc" #"pivxrpc"
 rpc_host = "127.0.0.1"
-rpc_port = "18049" if isTestnet else "8049"
+rpc_port = "26890" if isTesnet else "16890" #"18049" if isTestnet else "8049"
 rpc_url = "http://%s:%s@%s" % (rpc_user, rpc_pass, rpc_host)
 bb_url = "https://testnet" if isTestnet else "https://explorer"
-bb_url += ".pivx.link"
+bb_url += ".skyr.link" #".pivx.link"
 
 # FILENAME
 supply_data_file = os.path.join("/opt/coins/blockbook/plot_data", "supply_data.json")

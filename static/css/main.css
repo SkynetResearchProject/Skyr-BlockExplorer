@@ -71,21 +71,21 @@ h3 {
 }
 
 #header input{
-    background-color:#662D91;
+    background-color:#4053e1;
     color:#fff;
 }
 #header button{
-    background-color:#490e78;
+    background-color:#1c32d9;
     color:#fff;
     border: #fff 1px solid;
 }
 
 .bg-purple {
-    background-color: #2c0b4c;
+    background-color: #0f22b0;
 }
 
 .bg-gradient {
-    background: linear-gradient( to right, #2c0b4c,#490e78,#2c0b4c) !important;
+    background: linear-gradient( to right, #0f22b0,#1c32d9,#0f22b0) !important;
 }
 
 #wrap {
@@ -270,7 +270,7 @@ table.data-table table.data-table th {
 }
 
 .page-item.active .page-link {
-    background-color: #660099;
+    background-color: #001eff;
 }
 
 #txSpecific {
@@ -302,9 +302,9 @@ table.data-table table.data-table th {
 }
 
 .spinner > div {
-  border: 1px solid rgb(102, 0, 153);
-  background-color: purple;
-  background-color: rgba(102, 0, 153, 0.3);
+  border: 1px solid rgb(0, 18, 154);
+  background-color: blue;
+  background-color: rgba(0, 18, 154, 0.3);
   margin: 0 1px 0 1px;
   height: 100%;
   width: 6px;

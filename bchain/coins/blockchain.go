@@ -31,6 +31,7 @@ import (
 	"blockbook/bchain/coins/vipstarcoin"
 	"blockbook/bchain/coins/xzc"
 	"blockbook/bchain/coins/zec"
+	"blockbook/bchain/coins/skyr"
 	"blockbook/common"
 	"context"
 	"encoding/json"
@@ -80,6 +81,8 @@ func init() {
 	BlockChainFactories["Groestlcoin Testnet"] = grs.NewGroestlcoinRPC
 	BlockChainFactories["PIVX"] = pivx.NewPivXRPC
 	BlockChainFactories["PIVX Testnet"] = pivx.NewPivXRPC
+	BlockChainFactories["SKYR"] = skyr.NewSkyrRPC
+	BlockChainFactories["SKYR Testnet"] = skyr.NewSkyrRPC
 	BlockChainFactories["Polis"] = polis.NewPolisRPC
 	BlockChainFactories["Zcoin"] = xzc.NewZcoinRPC
 	BlockChainFactories["Fujicoin"] = fujicoin.NewFujicoinRPC

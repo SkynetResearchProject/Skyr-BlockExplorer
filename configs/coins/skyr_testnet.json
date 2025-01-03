@@ -1,0 +1,67 @@
+{
+  "coin": {
+    "name": "SKYR Testnet",
+    "shortcut": "tSKYR",
+    "label": "SKYR Testnet",
+    "alias": "skyr_testnet"
+  },
+  "ports": {
+    "backend_rpc": 26890,
+    "backend_message_queue": 58331,
+    "blockbook_internal": 10031,
+    "blockbook_public": 10131
+  },
+  "ipc": {
+    "rpc_url_template": "http://127.0.0.1:{{.Ports.BackendRPC}}",
+    "rpc_user": "r_pc",
+    "rpc_pass": "skyrr_pc",
+    "rpc_timeout": 25,
+    "message_queue_binding_template": "tcp://127.0.0.1:{{.Ports.BackendMessageQueue}}"
+  },
+  "backend": {
+    "package_name": "backend-skyr",
+    "package_revision": "satoshilabs-1",
+    "system_user": "skyr",
+    "version": "2.0.1.2",
+    "binary_url": "https://github.com/SkynetResearchProject/Skyrcoin/releases/download/v2.0.1.2/cli_skyrcoin-linux-gnu-x64_v2.0.1.2.tar.gz",
+    "verification_type": "sha256",
+    "verification_source": "b19da2c0ded08ff24c0d8952f4e1716b9c85c7e507b4909b51e9c668ef8251fb",
+    "extract_command": "tar -C backend  -xf --strip 1",
+    "exclude_files": [
+      ""
+    ],
+    "exec_command_template": "{{.Env.BackendInstallPath}}/{{.Coin.Alias}}/skyrcoind -datadir={{.Env.BackendDataPath}}/{{.Coin.Alias}}/backend -conf={{.Env.BackendInstallPath}}/{{.Coin.Alias}}/{{.Coin.Alias}}.conf -paramsdir={{.Env.BackendInstallPath}}/{{.Coin.Alias}}/share/pivx -pid=/run/{{.Coin.Alias}}/{{.Coin.Alias}}.pid",
+    "logrotate_files_template": "{{.Env.BackendDataPath}}/{{.Coin.Alias}}/backend/*.log",
+    "postinst_script_template": "",
+    "service_type": "forking",
+    "service_additional_params_template": "",
+    "protect_memory": false,
+    "mainnet": true,
+    "server_config_file": "bitcoin_like.conf",
+    "client_config_file": "bitcoin_like_client.conf",
+    "additional_params": {
+      "whitelist": "127.0.0.1"
+    }
+  },
+  "blockbook": {
+    "package_name": "blockbook-skyr",
+    "system_user": "blockbook-skyr",
+    "internal_binding_template": ":{{.Ports.BlockbookInternal}}",
+    "public_binding_template": ":{{.Ports.BlockbookPublic}}",
+    "explorer_url": "",
+    "additional_params": "",
+    "block_chain": {
+      "parse": true,
+      "mempool_workers": 8,
+      "mempool_sub_workers": 2,
+      "block_addresses_to_keep": 300,
+      "xpub_magic": 36513075,
+      "slip44": 119,
+      "additional_params": {}
+    }
+  },
+  "meta": {
+    "package_maintainer": "SkynerProject",
+    "package_maintainer_email": ""
+  }
+}
