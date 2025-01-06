@@ -1,0 +1,97 @@
+{{define "specific"}}
+<h1>REST API</h1>
+<h3>Legacy REST API V1</h3>
+<div class="row">
+        <p><em>The legacy API is a compatible subset of API provided by **Bitcore Insight**. It supports only Bitcoin-type coins. The details of the REST/socket.io requests can be found in the Insight's documentation.</em></p>
+        <table class="table data-table">
+            <tbody>
+                <tr>
+                    <td>GET /api/v1/block-index/[block heght]</td>
+                    <td class="data"><a href="/api/v1/block-index/1000">http:/127.0.0.1:10130/api/v1/block&ndash;index/1000</a></td>
+                </tr>
+                <tr>
+                    <td>GET /api/v1/tx/[txid]</td>
+                    <td class="data"><a href="/api/v1/tx/a1b210e13ea60bf488e73186cf8b1306a05af92bf0b759fbd150768fdee22c54">http:/127.0.0.1:10130/api/v1/tx/a1b210e13ea60bf488e73186cf8b1306a05af92bf0b759fbd150768fdee22c54</a></td>
+                </tr>
+                <tr>
+                    <td>GET /api/v1/address/[address]</td>
+                    <td class="data"><a href="/api/v1/address/BLFxzq52bxYTzdaVNQJ6A8HKvB4buXd9cq">http:/127.0.0.1:10130/api/v1/address/BLFxzq52bxYTzdaVNQJ6A8HKvB4buXd9cq</a></td>
+                </tr>
+                <tr>
+                    <td>GET /api/v1/utxo/[address]</td>
+                    <td class="data"><a href="/api/v1/utxo/B9WGNvSXYKifQcNJ3ZeiFwYWE1zXCqgv48">http:/127.0.0.1:10130/api/v1/utxo/B9WGNvSXYKifQcNJ3ZeiFwYWE1zXCqgv48</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v1/block/[block height | block hash]</td>
+                    <td class="data"><a href="/api/v1/block/1000">http:/127.0.0.1:10130/api/v1/block/1000</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v1/block/[block height | block hash]</td>
+                    <td class="data"><a href="/api/v1/block/49102dc4e56db336cb099dff2be8058e8151709e1b5db0e7c6c50643c48603aa">http:/127.0.0.1:10130/api/v1/block/49102dc4e56db336cb099dff2be8058e8151709e1b5db0e7c6c50643c48603aa</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v1/estimatefee/[number of blocks]</td>
+                    <td class="data"><a href="/api/v1/estimatefee/12">http:/127.0.0.1:10130/api/v1/estimatefee/12</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v1/sendtx/[hex tx data]</td>
+                    <td class="data"><a href="/api/v1/sendtx/0100000001">http:/127.0.0.1:10130/api/v1/sendtx/010000000182e6a1502ec657847eef705c687a7856c5...e685e29d0f89da2a1d40a6e45fa2ac00000000</a></td>
+                </tr>
+                <tr>
+                    <td>POST /api/v1/sendtx (hex tx data in request body)</td>
+                    <td class="data"><a href="/docs/api.md">look http:/127.0.0.1:10130/docs/api.md</a></td>
+                </tr>
+            </tbody>
+         </table>
+</div>
+
+<h3>REST API V2</h3>
+<div class="row">
+<p><em>API V2 is the current version of API. It can be used with all coin types that Blockbook supports. API V2 can be accessed using REST and websocket interface.</p></em>
+<p></p>
+<p><em>Common principles used in API V2:</p></em>
+<p></p>
+<p><em>- all amounts are transferred as strings, in the lowest denomination (satoshis, wei, ...), without decimal point</em><br>
+<em>- empty fields are omitted. Empty field is a string of value *null* or *""*, a number of value *0*, an object of value *null* or an array without elements. The reason for this is that the interface serves many different coins which use only subset of the fields. Sometimes this principle can lead to slightly confusing results, for example when transaction version is 0, the field *version* is omitted.</p></em>
+        <table class="table data-table">
+            <tbody>
+                <tr>
+                    <td>GET /api/v2/block-index/[block heght]</td>
+                    <td class="data"><a href="/api/v2/block-index/1000">http:/127.0.0.1:10130/api/v2/block&ndash;index/1000</a></td>
+                </tr>
+                <tr>
+                    <td>GET /api/v2/tx/[txid]</td>
+                    <td class="data"><a href="/api/v2/tx/a1b210e13ea60bf488e73186cf8b1306a05af92bf0b759fbd150768fdee22c54">http:/127.0.0.1:10130/api/v2/tx/a1b210e13ea60bf488e73186cf8b1306a05af92bf0b759fbd150768fdee22c54</a></td>
+                </tr>
+                <tr>
+                    <td>GET /api/v2/address/[address]</td>
+                    <td class="data"><a href="/api/v2/address/BLFxzq52bxYTzdaVNQJ6A8HKvB4buXd9cq">http:/127.0.0.1:10130/api/v2/address/BLFxzq52bxYTzdaVNQJ6A8HKvB4buXd9cq</a></td>
+                </tr>
+                <tr>
+                    <td>GET /api/v2/utxo/[address]</td>
+                    <td class="data"><a href="/api/v2/utxo/B9WGNvSXYKifQcNJ3ZeiFwYWE1zXCqgv48">http:/127.0.0.1:10130/api/v2/utxo/B9WGNvSXYKifQcNJ3ZeiFwYWE1zXCqgv48</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v2/block/[block height | block hash]</td>
+                    <td class="data"><a href="/api/v2/block/1000">http:/127.0.0.1:10130/api/v2/block/1000</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v2/block/[block height | block hash]</td>
+                    <td class="data"><a href="/api/v2/block/49102dc4e56db336cb099dff2be8058e8151709e1b5db0e7c6c50643c48603aa">http:/127.0.0.1:10130/api/v2/block/49102dc4e56db336cb099dff2be8058e8151709e1b5db0e7c6c50643c48603aa</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v2/estimatefee/[number of blocks]</td>
+                    <td class="data"><a href="/api/v2/estimatefee/12">http:/127.0.0.1:10130/api/v2/estimatefee/12</a></td>
+                </tr>
+               <tr>
+                    <td>GET /api/v2/sendtx/[hex tx data]</td>
+                    <td class="data"><a href="/api/v2/sendtx/0100000001">http:/127.0.0.1:10130/api/v2/sendtx/010000000182e6a1502ec657847eef705c687a7856c5...e685e29d0f89da2a1d40a6e45fa2ac00000000</a></td>
+                </tr>
+                <tr>
+                    <td>POST /api/v2/sendtx (hex tx data in request body)</td>
+                    <td class="data"><a href="/docs/api.md">look http:/127.0.0.1:10130/docs/api.md</a></td>
+                </tr>
+            </tbody>
+         </table>
+</div>
+{{end}}
