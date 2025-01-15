@@ -127,6 +127,8 @@ func (s *PublicServer) Run() error {
 func (s *PublicServer) ConnectFullPublicInterface() {
     serveMux := s.https.Handler.(*http.ServeMux)
     _, path := splitBinding(s.binding)
+    // mn page
+    serveMux.HandleFunc(path+"masternodes", s.htmlTemplateHandler(s.explorerMasternodes))
     // ipiinfo page
     serveMux.HandleFunc(path+"apiinfo", s.htmlTemplateHandler(s.explorerApiInfo))
     // status page
@@ -396,6 +398,7 @@ const (
     errorTpl
     errorInternalTpl
     indexTpl
+    mnTpl
     apiinfoTpl
     statusTpl
     txTpl
@@ -503,6 +506,7 @@ func (s *PublicServer) parseTemplates() []*template.Template {
     t[errorTpl] = createTemplate("./static/templates/error.html", "./static/templates/base.html")
     t[errorInternalTpl] = createTemplate("./static/templates/error.html", "./static/templates/base.html")
     t[indexTpl] = createTemplate("./static/templates/index.html", "./static/templates/base.html")
+    t[mnTpl] = createTemplate("./static/templates/mn.html", "./static/templates/base.html")
     t[apiinfoTpl] = createTemplate("./static/templates/apiinfo.html", "./static/templates/base.html")
     t[statusTpl] = createTemplate("./static/templates/status.html", "./static/templates/base.html")
     t[blocksTpl] = createTemplate("./static/templates/blocks.html", "./static/templates/paging.html", "./static/templates/base.html")
@@ -796,12 +800,25 @@ func (s *PublicServer) explorerIndex(w http.ResponseWriter, r *http.Request) (tp
     return indexTpl, data, nil
 }
 
-
 func (s *PublicServer) explorerApiInfo(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
     s.metrics.ExplorerViews.With(common.Labels{"action": "apiinfo"}).Inc()
     data := s.newTemplateData()
     data.Info = nil
     return apiinfoTpl, data, nil
+}
+
+func (s *PublicServer) explorerMasternodes(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
+    var err error
+    var si *api.SystemInfo
+
+    s.metrics.ExplorerViews.With(common.Labels{"action": "masternodes"}).Inc()
+    si, err = s.api.GetSystemInfo(false)
+    if err != nil {
+        return errorTpl, nil, err
+    }
+    data := s.newTemplateData()
+    data.Info = si
+    return mnTpl, data, nil
 }
 
 func (s *PublicServer) explorerStatus(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {

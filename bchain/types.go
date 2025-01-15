@@ -316,3 +316,4 @@ type Mempool interface {
     GetAllEntries() MempoolTxidEntries
     GetTransactionTime(txid string) uint32
 }
+

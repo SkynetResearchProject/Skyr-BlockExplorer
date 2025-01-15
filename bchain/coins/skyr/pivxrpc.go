@@ -137,6 +137,34 @@ type ResGetMasternodeCount struct {
     } `json:"result"`
 }
 
+// listmasternodes
+
+type CmdListMasternodes struct {
+	Method string `json:"method"`
+}
+
+type Masternode struct {
+    Rank        int         `json:"rank"`
+    Network     string      `json:"network"`
+    Txhash      string      `json:"txhash"`
+    Outidx      int         `json:"outindex"`
+    Pubkey      string      `json:"pubkey"`
+    Status      string      `json:"status"`
+    Addr        string      `json:"addr"`
+    Ip          string      `json:"ip"`
+    Version     int         `json:"version"`
+    Lastseen    int         `json:"lastseen"`
+    Activetime  int         `json:"activetime"`
+    Lastpaid    int         `json:"lastpaid"`
+}
+
+type Masternodes []Masternode
+
+type ResListMasternodes struct {
+	Error  *bchain.RPCError `json:"error"`
+	Result *Masternodes `json:"result"`
+}
+
 // GetNextSuperBlock returns the next superblock height after nHeight
 func (b *SkyrRPC) GetNextSuperBlock(nHeight int) int {
     nBlocksPerPeriod := 43200

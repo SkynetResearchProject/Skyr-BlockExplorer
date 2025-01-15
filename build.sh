@@ -8,4 +8,5 @@ export CGO_LDFLAGS='-L/usr/local/lib -L/usr/local/opt/zlib/lib -g -O2 -lrocksdb 
 
 #go build -ldflags "-X google.golang.org/protobuf/reflect/protoregistry.conflictPolicy=warn"
 
+rm -r bin/
 go build -o bin/blockbook blockbook.go
