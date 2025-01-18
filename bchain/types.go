@@ -149,6 +149,23 @@ type MempoolEntry struct {
     Depends         []string    `json:"depends"`
 }
 
+type RPCMasternode struct {
+    Rank        int         `json:"rank"`
+    Network     string      `json:"network"`
+    Txhash      string      `json:"txhash"`
+    Outidx      int         `json:"outindex"`
+    Pubkey      string      `json:"pubkey"`
+    Status      string      `json:"status"`
+    Addr        string      `json:"addr"`
+    Ip          string      `json:"ip"`
+    Version     int         `json:"version"`
+    Lastseen    int64       `json:"lastseen"`
+    Activetime  int64       `json:"activetime"`
+    Lastpaid    int64       `json:"lastpaid"`
+}
+
+type RPCMasternodes []RPCMasternode
+
 // ChainInfo is used to get information about blockchain
 type ChainInfo struct {
     Chain           string  `json:"chain"`
@@ -162,11 +179,12 @@ type ChainInfo struct {
     ProtocolVersion string  `json:"protocolversion"`
     Timeoffset      float64 `json:"timeoffset"`
     Warnings        string  `json:"warnings"`
-  TransparentSupply   json.Number `json:"transparentsupply"`
-    ShieldSupply   json.Number `json:"shieldsupply"`
-    MoneySupply   json.Number `json:"moneysupply"`
-  MasternodeCount int `json:"masternodecount"`
-  NextSuperBlock int `json:"masternodecount"`
+    TransparentSupply   json.Number `json:"transparentsupply"`
+    ShieldSupply    json.Number `json:"shieldsupply"`
+    MoneySupply     json.Number `json:"moneysupply"`
+    MasternodeCount int `json:"masternodecount"`
+    Mns             *RPCMasternodes `json:"masternodes"`
+    NextSuperBlock  int `json:"masternodecount"`
 }
 
 // RPCError defines rpc error returned by backend

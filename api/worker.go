@@ -1177,6 +1177,7 @@ func (w *Worker) GetSystemInfo(internal bool) (*SystemInfo, error) {
         ShieldSupply:     ci.ShieldSupply,
         MoneySupply:        ci.MoneySupply,
         MasternodeCount: ci.MasternodeCount,
+        Mns:		 ci.Mns,
         NextSuperBlock:  ci.NextSuperBlock,
     }
     glog.Info("GetSystemInfo finished in ", time.Since(start))

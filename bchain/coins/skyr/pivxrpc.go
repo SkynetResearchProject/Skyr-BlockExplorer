@@ -143,26 +143,9 @@ type CmdListMasternodes struct {
 	Method string `json:"method"`
 }
 
-type Masternode struct {
-    Rank        int         `json:"rank"`
-    Network     string      `json:"network"`
-    Txhash      string      `json:"txhash"`
-    Outidx      int         `json:"outindex"`
-    Pubkey      string      `json:"pubkey"`
-    Status      string      `json:"status"`
-    Addr        string      `json:"addr"`
-    Ip          string      `json:"ip"`
-    Version     int         `json:"version"`
-    Lastseen    int         `json:"lastseen"`
-    Activetime  int         `json:"activetime"`
-    Lastpaid    int         `json:"lastpaid"`
-}
-
-type Masternodes []Masternode
-
 type ResListMasternodes struct {
 	Error  *bchain.RPCError `json:"error"`
-	Result *Masternodes `json:"result"`
+	Result *bchain.RPCMasternodes `json:"result"`
 }
 
 // GetNextSuperBlock returns the next superblock height after nHeight
@@ -207,6 +190,18 @@ func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
         return nil, resMc.Error
     }
     rv.MasternodeCount = resMc.Result.Enabled
+
+    glog.V(1).Info("rpc: listmasternodes")
+
+    resMns := ResListMasternodes{}
+    err = b.Call(&CmdListMasternodes{Method: "listmasternodes"}, &resMns)
+    if err != nil {
+        return nil, err
+    }
+    if resMns.Error != nil {
+        return nil, resMns.Error
+    }
+    rv.Mns = resMns.Result
 
     rv.NextSuperBlock = b.GetNextSuperBlock(rv.Headers)
 
