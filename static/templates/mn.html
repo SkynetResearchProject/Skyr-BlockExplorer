@@ -20,7 +20,7 @@
                 <td class="ellipsis">{{$mn.Ip}}</td>
                 <td class="text-left"><a href="/address/{{$mn.Addr}}">{{$mn.Addr}}</a></td>
                 <td class="text-left">{{$mn.Status}}</td>
-                <td class="text-left"> - </td>
+                <td class="text-left">{{$mn.Lastblock}} </td>
                 <td class="text-left">
                         {{- if $mn.Lastseen -}}
                   	   {{formatUnixTime $mn.Lastseen}}

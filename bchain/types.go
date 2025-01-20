@@ -162,6 +162,7 @@ type RPCMasternode struct {
     Lastseen    int64       `json:"lastseen"`
     Activetime  int64       `json:"activetime"`
     Lastpaid    int64       `json:"lastpaid"`
+    Lastblock   int
 }
 
 type RPCMasternodes []RPCMasternode
