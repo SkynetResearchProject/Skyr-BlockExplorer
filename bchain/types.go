@@ -184,6 +184,7 @@ type ChainInfo struct {
     ShieldSupply    json.Number `json:"shieldsupply"`
     MoneySupply     json.Number `json:"moneysupply"`
     MasternodeCount int `json:"masternodecount"`
+    ConnectionCount int `json:"connectioncount"`
     Mns             *RPCMasternodes `json:"masternodes"`
     NextSuperBlock  int `json:"masternodecount"`
 }

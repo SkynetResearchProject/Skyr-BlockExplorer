@@ -1199,6 +1199,7 @@ func (w *Worker) GetSystemInfo(internal bool) (*SystemInfo, error) {
         ShieldSupply:     ci.ShieldSupply,
         MoneySupply:        ci.MoneySupply,
         MasternodeCount: ci.MasternodeCount,
+        ConnectionCount: ci.ConnectionCount,
         Mns:		 ci.Mns,
         NextSuperBlock:  ci.NextSuperBlock,
     }

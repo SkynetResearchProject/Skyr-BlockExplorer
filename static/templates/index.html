@@ -40,6 +40,10 @@
                     <td>Masternode Count</td>
                     <td class="data ellipsis">{{$be.MasternodeCount}}</td>
                 </tr>
+		<tr>
+                    <td>Connection Count</td>
+                    <td class="data ellipsis">{{$be.ConnectionCount}}</td>
+                </tr>
                 <tr>
                     <td>Next Superblock</td>
                     <td class="data">{{$be.NextSuperBlock}}</td>
@@ -63,7 +67,7 @@
                     <td class="data">{{formatTime $bb.LastMempoolTime}}</td>
                 </tr>
                 <tr>
-                    <td>Total PIV Supply</td>
+                    <td>Total SKYR Supply</td>
                     <td class="data ellipsis">{{formatSupply $be.MoneySupply}}&nbsp;{{$cs}}</td>
                 </tr>
                 <tr>

@@ -360,6 +360,7 @@ type BackendInfo struct {
     ShieldSupply       json.Number  `json:"shieldsupply"`
     MoneySupply        json.Number  `json:"moneysupply"`
     MasternodeCount    int          `json:"masternodecount"`
+    ConnectionCount    int          `json:"connectioncount"`
     Mns                *bchain.RPCMasternodes  `json:"masternodes"`
     NextSuperBlock     int          `json:"masternodecount"`
 }

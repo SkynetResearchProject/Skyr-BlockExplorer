@@ -137,6 +137,17 @@ type ResGetMasternodeCount struct {
     } `json:"result"`
 }
 
+// getconnectioncount
+
+type CmdGetConnectionCount struct {
+    Method string `json:"method"`
+}
+
+type ResGetConnectionCount struct {
+    Error  *bchain.RPCError `json:"error"`
+    Result  int  `json:"result"`
+}
+
 // listmasternodes
 
 type CmdListMasternodes struct {
@@ -190,6 +201,18 @@ func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
         return nil, resMc.Error
     }
     rv.MasternodeCount = resMc.Result.Enabled
+
+    glog.V(1).Info("rpc: getconnectioncount")
+
+    resCc := ResGetConnectionCount{}
+    err = b.Call(&CmdGetConnectionCount{Method: "getconnectioncount"}, &resCc)
+    if err != nil {
+        return nil, err
+    }
+    if resCc.Error != nil {
+        return nil, resCc.Error
+    }
+    rv.ConnectionCount = resCc.Result
 
     glog.V(1).Info("rpc: listmasternodes")
 
