@@ -159,6 +159,16 @@ type ResListMasternodes struct {
 	Result *bchain.RPCMasternodes `json:"result"`
 }
 
+//getpeerinfo
+type CmdGetPeerInfo struct {
+        Method string `json:"method"`
+}
+
+type ResGetPeerInfo struct {
+        Error  *bchain.RPCError `json:"error"`
+        Result *bchain.RPCPeers `json:"result"`
+}
+
 // GetNextSuperBlock returns the next superblock height after nHeight
 func (b *SkyrRPC) GetNextSuperBlock(nHeight int) int {
     nBlocksPerPeriod := 43200
@@ -225,6 +235,18 @@ func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
         return nil, resMns.Error
     }
     rv.Mns = resMns.Result
+
+    glog.V(1).Info("rpc: getpeerinfo")
+
+    resPeers := ResGetPeerInfo{}
+    err = b.Call(&CmdGetPeerInfo{Method: "getpeerinfo"}, &resPeers)
+    if err != nil {
+        return nil, err
+    }
+    if resPeers.Error != nil {
+        return nil, resPeers.Error
+    }
+    rv.Peers = resPeers.Result
 
     rv.NextSuperBlock = b.GetNextSuperBlock(rv.Headers)
 

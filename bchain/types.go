@@ -149,6 +149,7 @@ type MempoolEntry struct {
     Depends         []string    `json:"depends"`
 }
 
+// RPCMasternode is used to get data about masternodes
 type RPCMasternode struct {
     Rank        int         `json:"rank"`
     Network     string      `json:"network"`
@@ -166,6 +167,73 @@ type RPCMasternode struct {
 }
 
 type RPCMasternodes []RPCMasternode
+
+//
+type RPCPeer struct{
+    Id			int		`json:"id"`
+    Addr		string		`json:"addr"`
+    Addrlocal		string		`json:"addrlocal"`
+    Services		string		`json:"services"`
+    Lastsend		int64		`json:"lastsend"`
+    Lastrecv		int64		`json:"lastrecv"`
+    Bytessent		int64		`json:"bytessent"`
+    Bytesrecv		int64		`json:"bytesrecv"`
+    Conntime		int64		`json:"conntime"`
+    Timeoffset		int64		`json:"timeoffset"`
+    Pingtime		float64		`json:"pingtime"`
+    Version		int		`json:"version"`
+    Subver		string		`json:"subver"`
+    Inboun		bool		`json:"inbound"`
+    Startingheight	int64		`json:"startingheight"`
+    Banscore		int		`json:"banscore"`
+    Synced_headers	int64		`json:"synced_headers"`
+    Synced_blocks	int64		`json:"synced_blocks"`
+    Inflight		[]int64		`json:"inflight"`
+    Whitelisted		bool		`json:"whitelisted"`
+    Bytessent_per_msg	Bytessent_per_msg	`json:"bytessent_per_msg"`
+    Bytesrecv_per_msg	Bytesrecv_per_msg	`json:"bytesrecv_per_msg"`
+}
+	
+type Bytessent_per_msg struct{
+    Addr		int	`json:"addr"`
+    Block		int64	`json:"block"`
+    Getblocks		int	`json:"getblocks"`
+    Getdata		int64	`json:"getdata"`
+    Getsporks		int	`json:"getsporks"`
+    Inv			int	`json:"inv"`
+    Mnb			int	`json:"mnb"`
+    Mnp			int	`json:"mnp"`
+    Mnw			int	`json:"mnw"`
+    Ping		int	`json:"ping"`
+    Pong		int	`json:"pong"`
+    Spork		int	`json:"spork"`
+    Ssc			int	`json:"ssc"`
+    Tx			int64	`json:"tx"`
+    Verack		int	`json:"verack"`
+    Version		int	`json:"version"`
+}
+	
+type Bytesrecv_per_msg	struct{
+    Addr		int	`json:"addr"`
+    Block		int64	`json:"block"`
+    Dseg		int	`json:"dseg"`
+    Getaddr		int	`json:"getaddr"`
+    Getblocks		int	`json:"getblocks"`
+    Getdata		int64	`json:"getdata"`
+    Getsporks		int	`json:"getsporks"`
+    Inv			int	`json:"inv"`
+    Mnp			int	`json:"mnp"`
+    Mnw			int	`json:"mnw"`
+    Notfound		int	`json:"notfound"`
+    Ping		int	`json:"ping"`
+    Pong		int	`json:"pong"`
+    Spork		int	`json:"spork"`
+    Ssc			int	`json:"ssc"`
+    Verack		int	`json:"verack"`
+    Version		int	`json:"version"`
+}
+
+type RPCPeers []RPCPeer
 
 // ChainInfo is used to get information about blockchain
 type ChainInfo struct {
@@ -186,6 +254,7 @@ type ChainInfo struct {
     MasternodeCount int `json:"masternodecount"`
     ConnectionCount int `json:"connectioncount"`
     Mns             *RPCMasternodes `json:"masternodes"`
+    Peers           *RPCPeers       `json:"peerinfo"`
     NextSuperBlock  int `json:"masternodecount"`
 }
 

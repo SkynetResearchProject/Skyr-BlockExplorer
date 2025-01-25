@@ -362,6 +362,7 @@ type BackendInfo struct {
     MasternodeCount    int          `json:"masternodecount"`
     ConnectionCount    int          `json:"connectioncount"`
     Mns                *bchain.RPCMasternodes  `json:"masternodes"`
+    Peers              *bchain.RPCPeers        `json:"peerinfo"`
     NextSuperBlock     int          `json:"masternodecount"`
 }
 

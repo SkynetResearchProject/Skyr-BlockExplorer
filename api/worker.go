@@ -1196,11 +1196,12 @@ func (w *Worker) GetSystemInfo(internal bool) (*SystemInfo, error) {
         Version:         ci.Version,
         Warnings:        ci.Warnings,
         TransparentSupply:  ci.TransparentSupply,
-        ShieldSupply:     ci.ShieldSupply,
+        ShieldSupply:       ci.ShieldSupply,
         MoneySupply:        ci.MoneySupply,
         MasternodeCount: ci.MasternodeCount,
         ConnectionCount: ci.ConnectionCount,
         Mns:		 ci.Mns,
+        Peers:           ci.Peers,
         NextSuperBlock:  ci.NextSuperBlock,
     }
     glog.Info("GetSystemInfo finished in ", time.Since(start))
