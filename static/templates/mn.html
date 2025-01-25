@@ -1,14 +1,15 @@
-{{define "specific"}}{{$be := .Info.Backend}}{{$mns := .Mns}}
+{{define "specific"}}{{$be := .Info.Backend}}{{$mns := .Info.Backend.Mns}}
 <h4>{{$be.MasternodeCount}} Masternodes</h4>
 <div class="data-div">
     <table class="table table-striped data-table table-hover">
         <thead>
             <tr>
-                <th class="text-left" style="width: 7%;">Network</th>
+		<th class="text-left" style="width: 4%;">#</th>
+                <th class="text-left" style="width: 5%;">Network</th>
                 <th class="text-left" style="width: 15%;">ip</th>
                 <th class="text-left" style="width: 25%;" >Address</th>
                 <th class="text-left" style="width: 7%">Status</th>
-                <th class="text-left" style="width: 10%;">Last Block</th>
+                <th class="text-left" style="width: 8%;">Last Block</th>
                 <th class="text-left" style="width: 18%;">Last Seen</th>
                 <th class="text-left" style="width: 18%;">Last Paid</th>
             </tr>
@@ -16,6 +17,7 @@
         <tbody>
             {{- range $mn := $mns -}}
             <tr>
+                <th class="text-left">{{$mn.Rank}}</th>
                 <td class="text-left">{{$mn.Network}}</td>
                 <td class="ellipsis">{{$mn.Ip}}</td>
                 <td class="text-left"><a href="/address/{{$mn.Addr}}">{{$mn.Addr}}</a></td>

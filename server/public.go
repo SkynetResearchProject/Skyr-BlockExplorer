@@ -448,7 +448,6 @@ type TemplateData struct {
     NonZeroBalanceTokens bool
     IsCharts             bool
     ChartData            string
-    Mns                  *bchain.RPCMasternodes
 }
 
 func (s *PublicServer) parseTemplates() []*template.Template {
@@ -824,7 +823,6 @@ func (s *PublicServer) explorerMasternodes(w http.ResponseWriter, r *http.Reques
 
     data := s.newTemplateData()
     data.Info = si
-    data.Mns = si.Backend.Mns
     return mnTpl, data, nil
 }
 
