@@ -4,6 +4,8 @@ import (
     "blockbook/bchain"
     "blockbook/bchain/coins/btc"
     "encoding/json"
+    "net"
+    "strings"
 
     "github.com/golang/glog"
     "github.com/juju/errors"
@@ -235,6 +237,28 @@ func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
         return nil, resMns.Error
     }
     rv.Mns = resMns.Result
+
+    var bestHeight = rv.Blocks
+
+    conn, err := net.Dial("udp", "8.8.8.8:80")
+    if err == nil {
+        defer conn.Close()
+        //localip_ := "193.233.165.116:16888"  //for debug in docker 
+        localip_ := conn.LocalAddr().(*net.UDPAddr).String()
+        localip := strings.Split(localip_, ":")
+        //fmt.Println(localip[0])
+        var Mn = *rv.Mns
+        for i:=0; i<len(Mn); i++{
+            Ip_ := Mn[i].Ip
+            Ip := strings.Split(Ip_, ":")
+            //fmt.Println(Ip[0])
+            if localip[0] == Ip[0]{
+                Mn[i].Lastblock = int(bestHeight)
+            } else{
+                Mn[i].Lastblock = -1
+            }
+         }
+    }
 
     glog.V(1).Info("rpc: getpeerinfo")
 
