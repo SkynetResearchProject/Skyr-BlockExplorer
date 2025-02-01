@@ -3,9 +3,9 @@ package common
 import "runtime"
 
 var (
-	version   = "unknown"
+	version   = "5.6.1.1"
 	gitcommit = "unknown"
-	buildtime = "unknown"
+	buildtime = "2025-02-03T12:29:0.920912-09:00"
 )
 
 // VersionInfo holds information about the running Blockbook instance
