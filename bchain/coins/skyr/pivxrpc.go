@@ -203,8 +203,8 @@ func (b *SkyrRPC) GetMasternodesInfo() (*bchain.RPCMasternodes, error){
     conn, err := net.Dial("udp", "8.8.8.8:80")
     if err == nil {
         defer conn.Close()
-        localip_ := "193.233.165.116:16888"  //for debug in docker 
-        //localip_ := conn.LocalAddr().(*net.UDPAddr).String()
+        //localip_ := "193.233.165.116:16888"  //for debug in docker 
+        localip_ := conn.LocalAddr().(*net.UDPAddr).String()
         localip := strings.Split(localip_, ":")
         var Mn = *resMns.Result
         for i:=0; i<len(Mn); i++{

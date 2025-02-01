@@ -1151,12 +1151,62 @@ func (w *Worker) GetPeersInfo(internal bool) (*PeersInfo, error) {
         return nil, errors.Annotatef(err, "GetPeersInfo")
     }
 
+    resv, ress := w.GetCnts(prs)
+
     Prs := &PeersInfo{
        Peers:        prs,
+       Version:      resv,
+       Services:     ress,
     }
 
     glog.Info("GetPeersInfo finished in ", time.Since(start))
     return Prs, nil
+}
+
+func (w *Worker) GetCnts(s *bchain.RPCPeers) (*[]Version, *[]Service) {
+    var prs = *s
+    var ln = len(prs)
+
+    //versions
+    ver := make([]string, ln)
+	for i := 0; i < ln; i++ {
+		ver[i] = prs[i].Subver
+    }
+
+    resultv := make(map[string]int)
+	for _, v := range ver {
+		resultv[v]++
+	}
+
+    var  resv  =[]Version{}
+    var tmpv = Version{}
+	for k, m := range resultv {
+		//fmt.Printf("key = %s, count = %d\n", k, m)
+	    	tmpv.Subver = k
+        	tmpv.Cnt = m
+		resv = append(resv, tmpv)
+   }
+
+   // services
+   serv := make([]string, ln)
+	for i := 0; i < ln; i++ {
+		serv[i] = prs[i].Services
+	}
+	results := make(map[string]int)
+	for _, v := range serv {
+		results[v]++
+	}
+
+   var  ress  =[]Service{}
+   var tmps = Service{}
+	for k, m := range results {
+		//fmt.Printf("key = %s, count = %d\n", k, m)
+		tmps.Service = k
+        	tmps.Cnt = m
+		ress = append(ress, tmps)
+	}
+
+    return &resv, &ress
 }
 
 // GetSystemInfo returns information about system

@@ -809,7 +809,6 @@ func (s *PublicServer) explorerIndex(w http.ResponseWriter, r *http.Request) (tp
 func (s *PublicServer) explorerApiInfo(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
     s.metrics.ExplorerViews.With(common.Labels{"action": "apiinfo"}).Inc()
     data := s.newTemplateData()
-    data.Info = nil
     return apiinfoTpl, data, nil
 }
 

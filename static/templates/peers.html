@@ -1,5 +1,47 @@
-{{define "specific"}}{{$prs := .Peers.Peers}}
+{{define "specific"}}{{$prs := .Peers.Peers}}{{$vers := .Peers.Version}}{{$svs := .Peers.Services}}
 <h4>{{len $prs}} Peers</h4>
+<b>Summary</b>
+<div class="row">
+    <div class="col-md-6">
+	<p></p><p>Top Versions</p>
+	    <table class="table table-striped data-table table-hover">
+        	<tbody>
+            	    <thead>
+			<tr>
+		   	   <th class="text-left" style="width: 40%;">Version</th>
+                   	   <th class="text-left" style="width: 15%;">Count</th>
+                        </tr>
+            	    </thead>
+            	     {{- range $v := $vers -}}
+           	      <tr>
+                	  <td class="text-left">{{$v.Subver}}</td>
+               		  <td class="text-left">{{$v.Cnt}}</td>
+            	      </tr>
+                     {{- end -}}
+                </tbody>
+            </table>
+    </div>
+    <div class="col-md-6">
+        <p></p><p>Top Service Flags</p>
+            <table class="table table-striped data-table table-hover">
+                <tbody>
+                    <thead>
+                        <tr>
+                           <th class="text-left" style="width: 40%;">Services</th>
+                           <th class="text-left" style="width: 15%;">Count</th>
+                        </tr>
+                    </thead>
+                     {{- range $s := $svs -}}
+                      <tr>
+                          <td class="text-left">{{$s.Service}}</td>
+                          <td class="text-left">{{$s.Cnt}}</td>
+                      </tr>
+                     {{- end -}}
+                </tbody>
+            </table>
+    </div> 
+</div>
+<br>
 <div class="data-div">
     <table class="table table-striped data-table table-hover">
         <thead>

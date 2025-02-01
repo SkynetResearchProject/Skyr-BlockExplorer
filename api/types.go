@@ -374,8 +374,20 @@ type MasternodesInfo struct{
    Masternodes        *bchain.RPCMasternodes  `json:"masternodes"`
 }
 
+type Version struct{
+   Subver string
+   Cnt      int
+}
+
+type Service struct{
+   Service string
+   Cnt      int
+}
+
 type PeersInfo struct{
    Peers              *bchain.RPCPeers   `json:"peers"`
+   Version            *[]Version           `json:"resv"`
+   Services           *[]Service           `json:"ress"`
 }
 
 // MempoolTxid contains information about a transaction in mempool
