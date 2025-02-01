@@ -168,7 +168,11 @@ type RPCMasternode struct {
 
 type RPCMasternodes []RPCMasternode
 
-//
+type MasternodesInfo struct{
+   Masternodes        *RPCMasternodes  `json:"masternodes"`
+}
+
+// RPCPeer is used to get data about peers
 type RPCPeer struct{
     Id			int		`json:"id"`
     Addr		string		`json:"addr"`
@@ -193,7 +197,7 @@ type RPCPeer struct{
     Bytessent_per_msg	Bytessent_per_msg	`json:"bytessent_per_msg"`
     Bytesrecv_per_msg	Bytesrecv_per_msg	`json:"bytesrecv_per_msg"`
 }
-	
+
 type Bytessent_per_msg struct{
     Addr		int	`json:"addr"`
     Block		int64	`json:"block"`
@@ -212,7 +216,7 @@ type Bytessent_per_msg struct{
     Verack		int	`json:"verack"`
     Version		int	`json:"version"`
 }
-	
+
 type Bytesrecv_per_msg	struct{
     Addr		int	`json:"addr"`
     Block		int64	`json:"block"`
@@ -235,6 +239,10 @@ type Bytesrecv_per_msg	struct{
 
 type RPCPeers []RPCPeer
 
+type PeersInfo struct{
+    Peers        *RPCPeers  `json:"masternodes"`
+}
+
 // ChainInfo is used to get information about blockchain
 type ChainInfo struct {
     Chain           string  `json:"chain"`
@@ -253,8 +261,6 @@ type ChainInfo struct {
     MoneySupply     json.Number `json:"moneysupply"`
     MasternodeCount int `json:"masternodecount"`
     ConnectionCount int `json:"connectioncount"`
-    Mns             *RPCMasternodes `json:"masternodes"`
-    Peers           *RPCPeers       `json:"peerinfo"`
     NextSuperBlock  int `json:"masternodecount"`
 }
 
@@ -353,6 +359,9 @@ type BlockChain interface {
     EthereumTypeGetErc20ContractBalance(addrDesc, contractDesc AddressDescriptor) (*big.Int, error)
     // PIVX specific
     Findzcserial(serialHex string) (string, error)
+    // SKYR specific
+    GetMasternodesInfo() (*RPCMasternodes, error)
+    GetPeersInfo() (*RPCPeers, error)
 }
 
 // BlockChainParser defines common interface to parsing and conversions of block chain data

@@ -63,3 +63,12 @@ func (b *BaseChain) EthereumTypeGetErc20ContractBalance(addrDesc, contractDesc A
 func (b *BaseChain) Findzcserial(serialHex string) (string, error) {
     return "", errors.New("Findserial not supported")
 }
+
+// SKYR specific
+func (b *BaseChain) GetMasternodesInfo() (*RPCMasternodes, error) {
+    return nil, errors.New("Findserial not supported")
+}
+
+func (b *BaseChain) GetPeersInfo() (*RPCPeers, error) {
+    return nil, errors.New("Findserial not supported")
+}

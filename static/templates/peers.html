@@ -1,5 +1,5 @@
-{{define "specific"}}{{$be := .Info.Backend}}{{$prs := .Info.Backend.Peers}}
-<h4>{{$be.ConnectionCount}} Peers</h4>
+{{define "specific"}}{{$prs := .Peers.Peers}}
+<h4>{{len $prs}} Peers</h4>
 <div class="data-div">
     <table class="table table-striped data-table table-hover">
         <thead>

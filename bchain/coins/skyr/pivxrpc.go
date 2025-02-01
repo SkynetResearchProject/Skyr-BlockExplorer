@@ -180,6 +180,62 @@ func (b *SkyrRPC) GetNextSuperBlock(nHeight int) int {
     return nHeight - nHeight % nBlocksPerPeriod + nBlocksPerPeriod
 }
 
+// GetMasternodesInfo
+func (b *SkyrRPC) GetMasternodesInfo() (*bchain.RPCMasternodes, error){
+    rv, err := b.BitcoinGetChainInfo()
+    if err != nil {
+        return nil, err
+    }
+
+    var bestHeight = rv.Blocks
+
+    glog.V(1).Info("rpc: listmasternodes")
+
+    resMns := ResListMasternodes{}
+    err = b.Call(&CmdListMasternodes{Method: "listmasternodes"}, &resMns)
+    if err != nil {
+        return nil, err
+    }
+    if resMns.Error != nil {
+        return nil, resMns.Error
+    }
+
+    conn, err := net.Dial("udp", "8.8.8.8:80")
+    if err == nil {
+        defer conn.Close()
+        localip_ := "193.233.165.116:16888"  //for debug in docker 
+        //localip_ := conn.LocalAddr().(*net.UDPAddr).String()
+        localip := strings.Split(localip_, ":")
+        var Mn = *resMns.Result
+        for i:=0; i<len(Mn); i++{
+            Ip_ := Mn[i].Ip
+            Ip := strings.Split(Ip_, ":")
+            if localip[0] == Ip[0]{
+                Mn[i].Lastblock = int(bestHeight)
+            } else{
+                Mn[i].Lastblock = -1
+            }
+         }
+    }
+    return resMns.Result, nil
+}
+
+// GetPeersInfo
+func (b *SkyrRPC) GetPeersInfo() (*bchain.RPCPeers, error){
+    var err error
+    glog.V(1).Info("rpc: getpeerinfo")
+
+    resPeers := ResGetPeerInfo{}
+    err = b.Call(&CmdGetPeerInfo{Method: "getpeerinfo"}, &resPeers)
+    if err != nil {
+        return nil, err
+    }
+    if resPeers.Error != nil {
+        return nil, resPeers.Error
+    }
+    return resPeers.Result, nil
+}
+
 // GetChainInfo returns information about the connected backend
 // PIVX adds Money Supply to btc implementation
 func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
@@ -187,7 +243,6 @@ func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
     if err != nil {
         return nil, err
     }
-
     glog.V(1).Info("rpc: getinfo")
 
     resGi := ResGetInfo{}
@@ -225,52 +280,6 @@ func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
         return nil, resCc.Error
     }
     rv.ConnectionCount = resCc.Result
-
-    glog.V(1).Info("rpc: listmasternodes")
-
-    resMns := ResListMasternodes{}
-    err = b.Call(&CmdListMasternodes{Method: "listmasternodes"}, &resMns)
-    if err != nil {
-        return nil, err
-    }
-    if resMns.Error != nil {
-        return nil, resMns.Error
-    }
-    rv.Mns = resMns.Result
-
-    var bestHeight = rv.Blocks
-
-    conn, err := net.Dial("udp", "8.8.8.8:80")
-    if err == nil {
-        defer conn.Close()
-        //localip_ := "193.233.165.116:16888"  //for debug in docker 
-        localip_ := conn.LocalAddr().(*net.UDPAddr).String()
-        localip := strings.Split(localip_, ":")
-        //fmt.Println(localip[0])
-        var Mn = *rv.Mns
-        for i:=0; i<len(Mn); i++{
-            Ip_ := Mn[i].Ip
-            Ip := strings.Split(Ip_, ":")
-            //fmt.Println(Ip[0])
-            if localip[0] == Ip[0]{
-                Mn[i].Lastblock = int(bestHeight)
-            } else{
-                Mn[i].Lastblock = -1
-            }
-         }
-    }
-
-    glog.V(1).Info("rpc: getpeerinfo")
-
-    resPeers := ResGetPeerInfo{}
-    err = b.Call(&CmdGetPeerInfo{Method: "getpeerinfo"}, &resPeers)
-    if err != nil {
-        return nil, err
-    }
-    if resPeers.Error != nil {
-        return nil, resPeers.Error
-    }
-    rv.Peers = resPeers.Result
 
     rv.NextSuperBlock = b.GetNextSuperBlock(rv.Headers)
 

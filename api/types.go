@@ -361,8 +361,6 @@ type BackendInfo struct {
     MoneySupply        json.Number  `json:"moneysupply"`
     MasternodeCount    int          `json:"masternodecount"`
     ConnectionCount    int          `json:"connectioncount"`
-    Mns                *bchain.RPCMasternodes  `json:"masternodes"`
-    Peers              *bchain.RPCPeers        `json:"peerinfo"`
     NextSuperBlock     int          `json:"masternodecount"`
 }
 
@@ -370,6 +368,14 @@ type BackendInfo struct {
 type SystemInfo struct {
     Blockbook *BlockbookInfo `json:"blockbook"`
     Backend   *BackendInfo   `json:"backend"`
+}
+
+type MasternodesInfo struct{
+   Masternodes        *bchain.RPCMasternodes  `json:"masternodes"`
+}
+
+type PeersInfo struct{
+   Peers              *bchain.RPCPeers   `json:"peers"`
 }
 
 // MempoolTxid contains information about a transaction in mempool

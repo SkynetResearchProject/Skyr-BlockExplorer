@@ -443,6 +443,8 @@ type TemplateData struct {
     RelativeURL          string
     TOSLink              string
     SendTxHex            string
+    Masternodes          *api.MasternodesInfo
+    Peers		 *api.PeersInfo
     Apiinfo              string
     Status               string
     NonZeroBalanceTokens bool
@@ -814,28 +816,41 @@ func (s *PublicServer) explorerApiInfo(w http.ResponseWriter, r *http.Request) (
 func (s *PublicServer) explorerMasternodes(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
     var err error
     var si *api.SystemInfo
+    var mni *api.MasternodesInfo
 
     s.metrics.ExplorerViews.With(common.Labels{"action": "masternodes"}).Inc()
     si, err = s.api.GetSystemInfo(false)
     if err != nil {
         return errorTpl, nil, err
     }
-
-    data := s.newTemplateData()
-    data.Info = si
-    return mnTpl, data, nil
-}
-
-func (s *PublicServer) explorerPeers(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
-    var si *api.SystemInfo
-    var err error
-    s.metrics.ExplorerViews.With(common.Labels{"action": "peers"}).Inc()
-    si, err = s.api.GetSystemInfo(false)
+    mni, err = s.api.GetMasternodesInfo(false)
     if err != nil {
         return errorTpl, nil, err
     }
     data := s.newTemplateData()
     data.Info = si
+    data.Masternodes = mni
+    return mnTpl, data, nil
+}
+
+func (s *PublicServer) explorerPeers(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
+    var err error
+    var si *api.SystemInfo
+    var prs *api.PeersInfo
+
+    s.metrics.ExplorerViews.With(common.Labels{"action": "peers"}).Inc()
+    si, err = s.api.GetSystemInfo(false)
+    if err != nil {
+        return errorTpl, nil, err
+    }
+
+    prs, err = s.api.GetPeersInfo(false)
+    if err != nil {
+        return errorTpl, nil, err
+    }
+    data := s.newTemplateData()
+    data.Info = si
+    data.Peers = prs
     return peersTpl, data, nil
 }
 

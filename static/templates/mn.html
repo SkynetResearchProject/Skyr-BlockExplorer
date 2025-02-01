@@ -1,5 +1,5 @@
-{{define "specific"}}{{$be := .Info.Backend}}{{$mns := .Info.Backend.Mns}}
-<h4>{{$be.MasternodeCount}} Masternodes</h4>
+{{define "specific"}}{{$mns := .Masternodes.Masternodes}}
+<h4>{{len $mns}} Masternodes</h4>
 <div class="data-div">
     <table class="table table-striped data-table table-hover">
         <thead>

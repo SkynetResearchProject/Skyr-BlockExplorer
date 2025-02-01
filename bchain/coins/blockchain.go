@@ -195,6 +195,16 @@ func (c *blockChainWithMetrics) GetChainInfo() (v *bchain.ChainInfo, err error) 
 	return c.b.GetChainInfo()
 }
 
+func (c *blockChainWithMetrics) GetMasternodesInfo() (v *bchain.RPCMasternodes, err error) {
+        defer func(s time.Time) { c.observeRPCLatency("GetMasternodesInfo", s, err) }(time.Now())
+        return c.b.GetMasternodesInfo()
+}
+
+func (c *blockChainWithMetrics) GetPeersInfo() (v *bchain.RPCPeers, err error) {
+        defer func(s time.Time) { c.observeRPCLatency("GetPeersInfo", s, err) }(time.Now())
+        return c.b.GetPeersInfo()
+}
+
 func (c *blockChainWithMetrics) GetBestBlockHash() (v string, err error) {
 	defer func(s time.Time) { c.observeRPCLatency("GetBestBlockHash", s, err) }(time.Now())
 	return c.b.GetBestBlockHash()

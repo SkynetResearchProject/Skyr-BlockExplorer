@@ -1125,6 +1125,40 @@ func (w *Worker) ComputeFeeStats(blockFrom, blockTo int, stopCompute chan os.Sig
     return nil
 }
 
+// GetMasternodesInfo returns information about masternodes
+func (w *Worker) GetMasternodesInfo(internal bool) (*MasternodesInfo, error) {
+    start := time.Now()
+    mni, err := w.chain.GetMasternodesInfo()
+    if err != nil {
+        fmt.Println("GetMasternodesInfo")
+        return nil, errors.Annotatef(err, "GetMasternodesInfo")
+    }
+    //fmt.Println(*mni)
+
+    Mns := &MasternodesInfo{
+       Masternodes:        mni,
+    }
+
+    glog.Info("GetMasternodesInfo finished in ", time.Since(start))
+    return Mns, nil
+}
+
+// GetPeersInfo returns information about peers
+func (w *Worker) GetPeersInfo(internal bool) (*PeersInfo, error) {
+    start := time.Now()
+    prs, err := w.chain.GetPeersInfo()
+    if err != nil {
+        return nil, errors.Annotatef(err, "GetPeersInfo")
+    }
+
+    Prs := &PeersInfo{
+       Peers:        prs,
+    }
+
+    glog.Info("GetPeersInfo finished in ", time.Since(start))
+    return Prs, nil
+}
+
 // GetSystemInfo returns information about system
 func (w *Worker) GetSystemInfo(internal bool) (*SystemInfo, error) {
     start := time.Now()
@@ -1179,8 +1213,6 @@ func (w *Worker) GetSystemInfo(internal bool) (*SystemInfo, error) {
         MoneySupply:        ci.MoneySupply,
         MasternodeCount: ci.MasternodeCount,
         ConnectionCount: ci.ConnectionCount,
-        Mns:		 ci.Mns,
-        Peers:           ci.Peers,
         NextSuperBlock:  ci.NextSuperBlock,
     }
     glog.Info("GetSystemInfo finished in ", time.Since(start))
