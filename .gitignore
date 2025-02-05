@@ -16,3 +16,5 @@ build/*.deb
 \.idea/
 /.project
 bin/
+build/blockchaincfg.json
+build/tnblockchaincfg.json

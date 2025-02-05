@@ -196,6 +196,7 @@ type RPCPeer struct{
     Whitelisted		bool		`json:"whitelisted"`
     Bytessent_per_msg	Bytessent_per_msg	`json:"bytessent_per_msg"`
     Bytesrecv_per_msg	Bytesrecv_per_msg	`json:"bytesrecv_per_msg"`
+    Location		string		`json:"string"`
 }
 
 type Bytessent_per_msg struct{

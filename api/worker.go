@@ -1151,16 +1151,16 @@ func (w *Worker) GetPeersInfo(internal bool) (*PeersInfo, error) {
         return nil, errors.Annotatef(err, "GetPeersInfo")
     }
 
-    resv, ress := w.GetCnts(prs)
+     resv, ress := w.GetCnts(prs)
 
-    Prs := &PeersInfo{
-       Peers:        prs,
-       Version:      resv,
-       Services:     ress,
-    }
+     Prs := &PeersInfo{
+        Peers:        prs,
+        Version:      resv,
+        Services:     ress,
+     }
 
-    glog.Info("GetPeersInfo finished in ", time.Since(start))
-    return Prs, nil
+     glog.Info("GetPeersInfo finished in ", time.Since(start))
+     return Prs, nil
 }
 
 func (w *Worker) GetCnts(s *bchain.RPCPeers) (*[]Version, *[]Service) {

@@ -5,12 +5,14 @@ import (
     "blockbook/bchain/coins/btc"
     "encoding/json"
     "net"
+    "net/http"
     "strings"
+    "fmt"
+    "io/ioutil"
 
     "github.com/golang/glog"
     "github.com/juju/errors"
 )
-
 // SkyrRPC is an interface to JSON-RPC bitcoind service.
 type SkyrRPC struct {
     *btc.BitcoinRPC
@@ -220,6 +222,23 @@ func (b *SkyrRPC) GetMasternodesInfo() (*bchain.RPCMasternodes, error){
     return resMns.Result, nil
 }
 
+// The structures are partially implementeds ---
+type Name struct {
+    En  string    `json:"en"`
+}
+
+type Country struct {
+    Geoname_id              int         `json:"geoname_id"`
+    Is_in_european_union    bool        `json:"geoname_igeoname_id"`
+    Iso_code                string      `json:"iso_code"`
+    Names                   Name        `json:"names"`
+}
+
+type Location struct {
+    Country     Country `json:"country"`
+}
+// ---
+
 // GetPeersInfo
 func (b *SkyrRPC) GetPeersInfo() (*bchain.RPCPeers, error){
     var err error
@@ -232,6 +251,29 @@ func (b *SkyrRPC) GetPeersInfo() (*bchain.RPCPeers, error){
     }
     if resPeers.Error != nil {
         return nil, resPeers.Error
+    }
+
+    cfg := *b.ChainConfig
+    if len(cfg.Geolocation_url) > 0 {
+        var Peers = *resPeers.Result
+        for i:=0; i<len(Peers); i++ {
+           ip := strings.Split(Peers[i].Addr, ":")
+           client := http.Client{}
+           url := fmt.Sprintf(cfg.Geolocation_url, ip[0])
+           resp, err := client.Get(url)
+           defer resp.Body.Close()
+           if err == nil {
+               var loc Location
+               // read json http response
+               jsonDataFromHttp, err := ioutil.ReadAll(resp.Body)
+               if err == nil {
+                    err = json.Unmarshal([]byte(jsonDataFromHttp), &loc)
+                    if err == nil {
+                         Peers[i].Location = loc.Country.Names.En
+                    }
+               }
+           }
+        }
     }
     return resPeers.Result, nil
 }

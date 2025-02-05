@@ -57,6 +57,7 @@ type Configuration struct {
 	Slip44                       uint32 `json:"slip44,omitempty"`
 	AlternativeEstimateFee       string `json:"alternativeEstimateFee,omitempty"`
 	AlternativeEstimateFeeParams string `json:"alternativeEstimateFeeParams,omitempty"`
+        Geolocation_url              string `json:"geolocation_url"`
 }
 
 // NewBitcoinRPC returns new BitcoinRPC instance.
