@@ -1143,6 +1143,21 @@ func (w *Worker) GetMasternodesInfo(internal bool) (*MasternodesInfo, error) {
     return Mns, nil
 }
 
+// Get Top100
+func (w *Worker) GetTopInfo(internal bool) (*TopInfo, error) {
+    start := time.Now()
+
+    tops := w.db.GetTop()
+
+    Top := &TopInfo{
+        Tops:        tops,
+    }
+
+    glog.Info("GetPeersInfo finished in ", time.Since(start))
+    return Top, nil
+}
+
+
 // GetPeersInfo returns information about peers
 func (w *Worker) GetPeersInfo(internal bool) (*PeersInfo, error) {
     start := time.Now()

@@ -390,6 +390,10 @@ type PeersInfo struct{
    Services           *[]Service           `json:"ress"`
 }
 
+type TopInfo struct {
+    Tops              *[]db.Top             `json:"tops"`
+}
+
 // MempoolTxid contains information about a transaction in mempool
 type MempoolTxid struct {
     Time int64  `json:"time"`

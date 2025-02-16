@@ -131,6 +131,8 @@ func (s *PublicServer) ConnectFullPublicInterface() {
     serveMux.HandleFunc(path+"masternodes", s.htmlTemplateHandler(s.explorerMasternodes))
     // peers page
     serveMux.HandleFunc(path+"peers", s.htmlTemplateHandler(s.explorerPeers))
+    // top100 page
+    serveMux.HandleFunc(path+"top", s.htmlTemplateHandler(s.explorerTop))
     // ipiinfo page
     serveMux.HandleFunc(path+"apiinfo", s.htmlTemplateHandler(s.explorerApiInfo))
     // status page
@@ -402,6 +404,7 @@ const (
     indexTpl
     mnTpl
     peersTpl
+    topTpl
     apiinfoTpl
     statusTpl
     txTpl
@@ -445,6 +448,7 @@ type TemplateData struct {
     SendTxHex            string
     Masternodes          *api.MasternodesInfo
     Peers		 *api.PeersInfo
+    Top			 *api.TopInfo
     Apiinfo              string
     Status               string
     NonZeroBalanceTokens bool
@@ -513,6 +517,7 @@ func (s *PublicServer) parseTemplates() []*template.Template {
     t[indexTpl] = createTemplate("./static/templates/index.html", "./static/templates/base.html")
     t[mnTpl] = createTemplate("./static/templates/mn.html", "./static/templates/base.html")
     t[peersTpl] = createTemplate("./static/templates/peers.html", "./static/templates/base.html")
+    t[topTpl] = createTemplate("./static/templates/top.html", "./static/templates/base.html")
     t[apiinfoTpl] = createTemplate("./static/templates/apiinfo.html", "./static/templates/base.html")
     t[statusTpl] = createTemplate("./static/templates/status.html", "./static/templates/base.html")
     t[blocksTpl] = createTemplate("./static/templates/blocks.html", "./static/templates/paging.html", "./static/templates/base.html")
@@ -851,6 +856,39 @@ func (s *PublicServer) explorerPeers(w http.ResponseWriter, r *http.Request) (tp
     data.Info = si
     data.Peers = prs
     return peersTpl, data, nil
+}
+
+func (s *PublicServer) explorerTop(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
+    var err error
+    var si *api.SystemInfo
+
+    s.metrics.ExplorerViews.With(common.Labels{"action": "top100"}).Inc()
+    si, err = s.api.GetSystemInfo(false)
+    if err != nil {
+        return errorTpl, nil, err
+    }
+    var total float64 = 10000000000
+    var sstr = si.Backend.MoneySupply.String()
+
+    total, err = strconv.ParseFloat(sstr, 64)
+    if err != nil {
+        fmt.Println(err)
+    }
+
+
+    tops, err := s.api.GetTopInfo(false)
+    if err != nil {
+        return errorTpl, nil, err
+    }
+    var t = *tops.Tops
+    for i:=0; i<len(t); i++ {
+        t[i].Percentage = fmt.Sprintf("%2f", t[i].BalanceNum * 100 / total)
+    }
+
+    data := s.newTemplateData()
+    data.Info = si
+    data.Top = tops
+    return topTpl, data, nil
 }
 
 func (s *PublicServer) explorerStatus(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {

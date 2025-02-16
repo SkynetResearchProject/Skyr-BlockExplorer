@@ -83,6 +83,8 @@ const (
     cfTxAddresses
     // EthereumType
     cfAddressContracts = cfAddressBalance
+    // new
+    CfAddressBalance = cfAddressBalance
 )
 
 // common columns
@@ -92,6 +94,59 @@ var cfBaseNames = []string{"default", "height", "addresses", "blockTxs", "transa
 // type specific columns
 var cfNamesBitcoinType = []string{"addressBalance", "txAddresses"}
 var cfNamesEthereumType = []string{"addressContracts"}
+
+type Top struct {
+    Num               int32              `json:"num"`
+    Address           string             `json:"address"`
+    BalanceNum        float64            `json:"balancef"`
+    Balance           string             `json:"balance"`
+    Percentage        string             `json:"percentage"`
+}
+
+func (d *RocksDB) GetTop() (*[]Top){
+    it := d.db.NewIteratorCF(d.ro, d.cfh[cfAddressBalance])
+    defer it.Close()
+
+    i := 0
+    tops := []Top{}
+    for it.SeekToFirst(); it.Valid(); it.Next() {
+        addr, _, err := d.chainParser.GetAddressesFromAddrDesc( bchain.AddressDescriptor(it.Key().Data()) ) // addrDesc = key
+        if err != nil {
+            continue
+        }
+        buf := it.Value().Data()
+
+        bal, err := unpackAddrBalance(buf, d.chainParser.PackedTxidLen(), 0)
+        if err != nil {
+            continue
+        }
+
+        s := bal.BalanceSat.String()
+        b, err := strconv.ParseInt(s, 10, 64)
+        if err != nil {
+            continue
+        }
+        r := float64(b) / 100000000
+        s = strconv.FormatFloat(r, 'f', 8, 64)
+
+        t := Top{
+                  Address: addr[0],
+                  BalanceNum: r,
+                  Balance:  s,
+                 }
+        tops = append(tops, t)
+        i++
+    }
+    sort.Slice(tops, func(i, j int) (less bool) {
+        return tops[i].BalanceNum > tops[j].BalanceNum
+    })
+    tops2 := tops[0:100]
+
+    for i := 0; i < 100; i++ {
+        tops2[i].Num = int32(i + 1)
+    }
+    return &tops2
+}
 
 func openDB(path string, c *gorocksdb.Cache, openFiles int) (*gorocksdb.DB, []*gorocksdb.ColumnFamilyHandle, error) {
     // opts with bloom filter

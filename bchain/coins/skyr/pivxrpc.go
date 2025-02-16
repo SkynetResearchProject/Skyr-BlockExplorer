@@ -9,6 +9,7 @@ import (
     "strings"
     "fmt"
     "io/ioutil"
+    "time"
 
     "github.com/golang/glog"
     "github.com/juju/errors"
@@ -205,14 +206,14 @@ func (b *SkyrRPC) GetMasternodesInfo() (*bchain.RPCMasternodes, error){
     conn, err := net.Dial("udp", "8.8.8.8:80")
     if err == nil {
         defer conn.Close()
-        //localip_ := "193.233.165.116:16888"  //for debug in docker 
+        //localip_ := "193.233.165.116:16888"  //for debug in docker
         localip_ := conn.LocalAddr().(*net.UDPAddr).String()
         localip := strings.Split(localip_, ":")
         var Mn = *resMns.Result
         for i:=0; i<len(Mn); i++{
             Ip_ := Mn[i].Ip
             Ip := strings.Split(Ip_, ":")
-            if localip[0] == Ip[0]{
+            if localip[0] == Ip[0] || len(Ip[0]) > 12 { //it's fake, will be new rpc-command 'getlastblock "ip"'
                 Mn[i].Lastblock = int(bestHeight)
             } else{
                 Mn[i].Lastblock = -1
@@ -258,7 +259,7 @@ func (b *SkyrRPC) GetPeersInfo() (*bchain.RPCPeers, error){
         var Peers = *resPeers.Result
         for i:=0; i<len(Peers); i++ {
            ip := strings.Split(Peers[i].Addr, ":")
-           client := http.Client{}
+           client := http.Client{Timeout: 5 * time.Second,}
            url := fmt.Sprintf(cfg.Geolocation_url, ip[0])
            resp, err := client.Get(url)
            defer resp.Body.Close()
