@@ -63,6 +63,10 @@
                     <td class="data">{{$bb.MempoolSize}}</td>
                 </tr>
                 <tr>
+                    <td>Size On Disk</td>
+                    <td class="data">{{$bb.MempoolSize}}</td>
+                </tr>
+                <tr>
                     <td>Last Mempool Update</td>
                     <td class="data">{{formatTime $bb.LastMempoolTime}}</td>
                 </tr>
@@ -93,7 +97,7 @@
 </div>
 <h3 style="display: inline;">Last blocks</h3> &nbsp;(<a href='/blocks'>see all</a>)
 <div class="data-div">
-    <table class="table table-striped data-table table-hover">
+    <table class="table-striped data-table table-hover">
         <thead>
             <tr>
                 <th style="width: 10%;">Height</th>
