@@ -1,3 +1,4 @@
+// The package is forked from PIVX
 package skyr
 
 import (
@@ -14,6 +15,7 @@ import (
     "github.com/golang/glog"
     "github.com/juju/errors"
 )
+
 // SkyrRPC is an interface to JSON-RPC bitcoind service.
 type SkyrRPC struct {
     *btc.BitcoinRPC
@@ -280,7 +282,7 @@ func (b *SkyrRPC) GetPeersInfo() (*bchain.RPCPeers, error){
 }
 
 // GetChainInfo returns information about the connected backend
-// PIVX adds Money Supply to btc implementation
+// SKYR adds Money Supply to btc implementation
 func (b *SkyrRPC) GetChainInfo() (*bchain.ChainInfo, error) {
     rv, err := b.BitcoinGetChainInfo()
     if err != nil {
