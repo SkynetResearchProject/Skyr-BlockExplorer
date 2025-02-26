@@ -392,6 +392,7 @@ type PeersInfo struct{
 
 type TopInfo struct {
     Tops              *[]db.Top             `json:"tops"`
+    WealthDists       *[]db.WealthDist      `json:"wealthdist"`
 }
 
 // MempoolTxid contains information about a transaction in mempool

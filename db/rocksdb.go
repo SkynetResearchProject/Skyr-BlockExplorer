@@ -103,6 +103,12 @@ type Top struct {
     Percentage        string             `json:"percentage"`
 }
 
+type WealthDist struct {
+    Dip               string             `json:"dip"`
+    Amount            string             `json:"amount"`
+    Percentage        string             `json:"percentage"`
+}
+
 func (d *RocksDB) GetTop() (*[]Top){
     it := d.db.NewIteratorCF(d.ro, d.cfh[cfAddressBalance])
     defer it.Close()
@@ -111,7 +117,7 @@ func (d *RocksDB) GetTop() (*[]Top){
     tops := []Top{}
     for it.SeekToFirst(); it.Valid(); it.Next() {
         addr, _, err := d.chainParser.GetAddressesFromAddrDesc( bchain.AddressDescriptor(it.Key().Data()) ) // addrDesc = key
-        if err != nil {
+        if err != nil || addr[0][0:1] == "S" || addr[0][0:1] == "W" { //to skip staker addresses
             continue
         }
         buf := it.Value().Data()
@@ -136,6 +142,9 @@ func (d *RocksDB) GetTop() (*[]Top){
                  }
         tops = append(tops, t)
         i++
+    }
+    if len(tops) == 0 {
+	return &tops   //return pointer to empty []top
     }
     sort.Slice(tops, func(i, j int) (less bool) {
         return tops[i].BalanceNum > tops[j].BalanceNum

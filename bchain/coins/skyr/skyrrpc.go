@@ -260,21 +260,23 @@ func (b *SkyrRPC) GetPeersInfo() (*bchain.RPCPeers, error){
     if len(cfg.Geolocation_url) > 0 {
         var Peers = *resPeers.Result
         for i:=0; i<len(Peers); i++ {
-           ip := strings.Split(Peers[i].Addr, ":")
-           client := http.Client{Timeout: 5 * time.Second,}
-           url := fmt.Sprintf(cfg.Geolocation_url, ip[0])
-           resp, err := client.Get(url)
-           defer resp.Body.Close()
-           if err == nil {
-               var loc Location
-               // read json http response
-               jsonDataFromHttp, err := ioutil.ReadAll(resp.Body)
-               if err == nil {
-                    err = json.Unmarshal([]byte(jsonDataFromHttp), &loc)
+            ip := strings.Split(Peers[i].Addr, ":")
+            client := http.Client{Timeout: 5 * time.Second,}
+            url := fmt.Sprintf(cfg.Geolocation_url, ip[0])
+            if len(url) > 0 {
+                resp, err := client.Get(url)
+                defer resp.Body.Close()
+                if err == nil {
+                    var loc Location
+                    // read json http response
+                    jsonDataFromHttp, err := ioutil.ReadAll(resp.Body)
                     if err == nil {
-                         Peers[i].Location = loc.Country.Names.En
+                        err = json.Unmarshal([]byte(jsonDataFromHttp), &loc)
+                        if err == nil {
+                             Peers[i].Location = loc.Country.Names.En
+                        }
                     }
-               }
+                }
            }
         }
     }

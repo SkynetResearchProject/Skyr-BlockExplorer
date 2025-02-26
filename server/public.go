@@ -858,6 +858,17 @@ func (s *PublicServer) explorerPeers(w http.ResponseWriter, r *http.Request) (tp
     return peersTpl, data, nil
 }
 
+func (s *PublicServer) TopSum(start int32, end int32, tops []db.Top) (float64) {
+    var sum float64 = 0
+    if len(tops) == 0 {
+       return sum
+    }
+    for i := start; i < end; i++ {
+        sum = sum + tops[i].BalanceNum
+    }
+    return sum
+}
+
 func (s *PublicServer) explorerTop(w http.ResponseWriter, r *http.Request) (tpl, *TemplateData, error) {
     var err error
     var si *api.SystemInfo
@@ -880,10 +891,44 @@ func (s *PublicServer) explorerTop(w http.ResponseWriter, r *http.Request) (tpl,
     if err != nil {
         return errorTpl, nil, err
     }
+
     var t = *tops.Tops
+    var sum float64 = 0.0
     for i:=0; i<len(t); i++ {
         t[i].Percentage = fmt.Sprintf("%2f", t[i].BalanceNum * 100 / total)
+        sum = sum + t[i].BalanceNum
     }
+
+    wl := db.WealthDist{}
+    wls := []db.WealthDist{}
+    var amount float64 = 0.0
+    var pst string = ""
+
+    var i int32
+    for i = 0; i < 4; i++ {
+        amount = s.TopSum(i*25, (i+1)*25, t)
+        pst = fmt.Sprintf("%2f", 100 * amount / total)
+	wl.Dip = fmt.Sprintf("Top %d-%d", i*25+1, (i+1)*25)
+        wl.Amount = fmt.Sprintf("%f", amount)
+        wl.Percentage = pst
+        wls = append(wls, wl)
+    }
+
+    wl.Dip = fmt.Sprintf("Top 1-100 Total")
+    wl.Amount = fmt.Sprintf("%f", sum)
+    wl.Percentage =  fmt.Sprintf("%2f", 100 * sum / total)
+    wls = append(wls, wl)
+
+    wl.Dip = fmt.Sprintf("101+")
+    var delta float64  = 0
+    if sum > 0 {
+        delta = total - sum
+    }
+    wl.Amount = fmt.Sprintf("%f", delta)
+    wl.Percentage =  fmt.Sprintf("%2f", 100 * delta / total)
+    wls = append(wls, wl)
+
+    tops.WealthDists = &wls
 
     data := s.newTemplateData()
     data.Info = si

@@ -1153,7 +1153,7 @@ func (w *Worker) GetTopInfo(internal bool) (*TopInfo, error) {
         Tops:        tops,
     }
 
-    glog.Info("GetPeersInfo finished in ", time.Since(start))
+    glog.Info("GetTopInfo finished in ", time.Since(start))
     return Top, nil
 }
 
