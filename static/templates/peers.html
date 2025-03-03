@@ -1,4 +1,11 @@
 {{define "specific"}}{{$prs := .Peers.Peers}}{{$vers := .Peers.Version}}{{$svs := .Peers.Services}}
+<link rel="stylesheet" href="/static/css/dataTables.bootstrap4.min.skynet.css">
+<script src="/static/js/jquery.dataTables.min.skynet.js"></script>
+<script src="/static/js/dataTables.bootstrap4.min.js"></script>
+<script>$(document).ready(function() {
+            $(".data-search").DataTable();
+        });
+</script>
 <link rel="stylesheet" href="/static/css/mn.css">
 <h4>{{len $prs}} Peers</h4>
 <b>Summary</b>
@@ -43,11 +50,11 @@
     </div> 
 </div>
 <br>
-<div class="data-div">
-    <table class="table-striped data-table table-hover">
+<div class="row">
+    <table class="table-striped data-table table-hover data-search">
         <thead>
             <tr>
-               <th class="text-left" style="width: 4%;">#</th>
+               <th class="text-left" style="width: 1%;">#</th>
                 <th class="text-left" style="width: 15%;">Version</th>
                 <th class="text-left" style="width: 15%;">Address</th>
                 <th class="text-left" style="width: 13%;">Services</th>
