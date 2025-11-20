@@ -66,9 +66,13 @@ func (b *BaseChain) Findzcserial(serialHex string) (string, error) {
 
 // SKYR specific
 func (b *BaseChain) GetMasternodesInfo() (*RPCMasternodes, error) {
-    return nil, errors.New("Findserial not supported")
+    return nil, errors.New("GetMasternodesInfo not supported")
 }
 
 func (b *BaseChain) GetPeersInfo() (*RPCPeers, error) {
-    return nil, errors.New("Findserial not supported")
+    return nil, errors.New("GetPeersInfo not supported")
+}
+
+func (b *BaseChain) GetNodeBlockCount(addr string) (int, error) {
+    return 0, errors.New("GetNodeBlockCount not supported")
 }

@@ -363,6 +363,7 @@ type BlockChain interface {
     // SKYR specific
     GetMasternodesInfo() (*RPCMasternodes, error)
     GetPeersInfo() (*RPCPeers, error)
+    GetNodeBlockCount(addr string) (int, error)
 }
 
 // BlockChainParser defines common interface to parsing and conversions of block chain data

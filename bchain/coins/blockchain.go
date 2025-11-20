@@ -349,3 +349,8 @@ func (c *blockChainWithMetrics) Findzcserial(serialHex string) (txid string, err
 	defer func(s time.Time) { c.observeRPCLatency("Findzcserial", s, err) }(time.Now())
 	return c.b.Findzcserial(serialHex)
 }
+
+func (c *blockChainWithMetrics) GetNodeBlockCount(addr string) (blockcnt int, err error) {
+	defer func(s time.Time) { c.observeRPCLatency("GetNodeBlockCount", s, err) }(time.Now())
+	return c.b.GetNodeBlockCount(addr)
+}

@@ -176,6 +176,37 @@ type ResGetPeerInfo struct {
         Result *bchain.RPCPeers `json:"result"`
 }
 
+// getnodeblockcount
+
+type CmdGetNodeBlockCount struct {
+    Method string `json:"method"`
+    Params struct {
+	Addr string `json:"nodeaddr"`
+    } `json:"params"`
+}
+
+type ResGetNodeBlockCount struct {
+    Error  *bchain.RPCError `json:"error"`
+    Result  int  `json:"result"`
+}
+
+// GetNodeBlockCount returns blockcount value from remote node
+func (z *SkyrRPC) GetNodeBlockCount(addr string) (int, error) {
+    glog.V(1).Info("rpc: getnodeblockcount")
+    resNbc := ResGetNodeBlockCount{}
+    req := CmdGetNodeBlockCount{Method: "getnodeblockcount"}
+    req.Params.Addr = addr
+    err := z.Call(&req, &resNbc)
+    //var err error
+    if err != nil {
+        return 0, err
+    }
+    if resNbc.Error != nil {
+        return 0, resNbc.Error
+    }
+    return resNbc.Result, nil
+}
+
 // GetNextSuperBlock returns the next superblock height after nHeight
 func (b *SkyrRPC) GetNextSuperBlock(nHeight int) int {
     nBlocksPerPeriod := 43200
@@ -208,17 +239,18 @@ func (b *SkyrRPC) GetMasternodesInfo() (*bchain.RPCMasternodes, error){
     conn, err := net.Dial("udp", "8.8.8.8:80")
     if err == nil {
         defer conn.Close()
-        //localip_ := "193.233.165.116:16888"  //for debug in docker
+        //localip_ := "150.241.115.196:16888"  //for debug in docker
         localip_ := conn.LocalAddr().(*net.UDPAddr).String()
         localip := strings.Split(localip_, ":")
         var Mn = *resMns.Result
         for i:=0; i<len(Mn); i++{
             Ip_ := Mn[i].Ip
             Ip := strings.Split(Ip_, ":")
-            if localip[0] == Ip[0] || len(Ip[0]) > 12 { //it's fake, will be new rpc-command 'getlastblock "ip"'
+            if localip[0] == Ip[0] {
                 Mn[i].Lastblock = int(bestHeight)
             } else{
-                Mn[i].Lastblock = -1
+                blockcnt, _ := b.GetNodeBlockCount(Ip[0])
+                Mn[i].Lastblock = blockcnt
             }
          }
     }
